@@ -1,0 +1,124 @@
+#!/usr/bin/env perl
+use Mojolicious::Lite -signatures;
+
+get '/' => sub ($c) {
+  $c->render(template => 'index');
+};
+
+get '/rectangle/area' => sub ($c) {
+  $c->render(template => 'rectangle-area');
+};
+
+get '/rectangle/area/:height/:width' => sub ($c) {
+  $c->render(template => 'rectangle-area-params');
+  $c->stash(
+    height => $c->param('height'),
+    width => $c->param('width'),
+  )
+};
+
+get '/rectangle/perimeter' => sub ($c) {
+  $c->render(template => 'rectangle-peri');
+};
+
+get '/rectangle/perimeter/:height/:width' => sub ($c) {
+  $c->render(template => 'rectangle-peri-params');
+  $c->stash(
+    height => $c->param('height'),
+    width => $c->param('width'),
+  );
+};
+
+get '/circle/area' => sub ($c) {
+  $c->render(template => 'circle-area');
+};
+
+get '/circle/area/:radius' => sub ($c) {
+  $c->render(template => 'circle-area-param');
+  $c->stash(
+    radius => $c->param('radius'),
+  );
+};
+
+get '/circle/perimeter' => sub ($c) {
+  $c->render(template => 'circle-peri');
+};
+
+get '/circle/perimeter/:radius' => sub ($c) {
+  $c->render(template => 'circle-peri-param');
+  $c->stash(
+    radius => $c->param('radius'),
+  );
+};
+
+app->start;
+
+__DATA__
+
+@@ index.html.ep
+% layout 'base';
+% title 'Geometry';
+<h1>Areas and Perimeters of Rectangles and Circles</h1>
+<h2>Edit the url to match one of the following formats:</h2>
+<h2><a href='/circle/area/'>/circle/area/:radius</a></h2>
+<h2><a href='circle/perimeter'>/circle/perimeter/:radius</a></h2>
+<h2><a href='/rectangle/area'>/rectangle/area/:height/:width</a></h2>
+<h2><a href='/rectangle/perimeter/'>/rectangle/perimeter/:height/:width</a></h2>
+
+@@ rectangle-area.html.ep
+% layout 'base';
+% title 'Rectangle Area';
+<h1>Area of a rectangle!</h1>
+
+@@ rectangle-area-params.html.ep
+% layout 'base';
+% title 'Rectangle Area';
+<h1>Area of a rectangle!</h1>
+<h2>If the height is <%= $height %> and the width is <%= $width %>, then the area is <%= $height * $width %>.</h1>
+
+@@ rectangle-peri.html.ep
+% layout 'base';
+% title 'Rectangle Perimeter';
+<h1>Perimeter of a rectangle!</h1>
+
+@@ rectangle-peri-params.html.ep
+% layout 'base';
+% title 'Rectangle Perimeter';
+<h1>Perimeter of a rectangle!</h1>
+<h2>If the height is <%= $height %> and the width is <%= $width %>, then the perimeter is <%= 2*($height+$width) %>.</h2>
+
+@@ circle-area.html.ep
+% layout 'base';
+% title 'Circle Area';
+<h1>Area of a circle!</h1>
+
+@@ circle-area-param.html.ep
+% layout 'base';
+% title 'Circle Area';
+<h1>Area of a circle!</h1>
+<h2>If the radius is <%= $radius %>, then the area is about <%= 3.14*($radius**2) %>.</h2>
+
+@@ circle-peri.html.ep
+% layout 'base';
+% title 'Circle Perimeter';
+<h1>Perimeter of a circle!</h1>
+
+@@ circle-peri-param.html.ep
+% layout 'base';
+% title 'Circle Perimeter';
+<h1>Perimeter of a circle!</h1>
+<h2>If the radius is <%= $radius %>, then the perimeter is about <%= 2*3.14*$radius %>.</h1>
+
+@@ layouts/base.html.ep
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <%= content %>
+</body>
+</html>
